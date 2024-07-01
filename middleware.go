@@ -72,10 +72,14 @@ func NewPrometheus(ns string, opts PrometheusOpts, metrics []DefineMetric) *Prom
 	//default standout
 	p.logWriter = os.Stdout
 
-	for _, m := range metrics {
-		collector := newMetric(ns, m)
-		p.defineMetrics[m.Name] = collector
-		p.defineMetricType[m.Name] = m.MetricType
+	if len(metrics) > 0 {
+
+		for _, m := range metrics {
+			collector := newMetric(ns, m)
+			p.defineMetrics[m.Name] = collector
+			p.defineMetricType[m.Name] = m.MetricType
+		}
+
 	}
 
 	return p
