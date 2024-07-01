@@ -68,6 +68,7 @@ func NewPrometheus(ns string, opts PrometheusOpts, metrics []DefineMetric) *Prom
 	stopCh := make(chan struct{})
 	p := &PrometheusMiddleware{opts: opts, stopSign: stopCh}
 	p.defineMetrics = make(map[string]prometheus.Collector)
+	p.defineMetricType = make(map[string]string)
 
 	//default standout
 	p.logWriter = os.Stdout
