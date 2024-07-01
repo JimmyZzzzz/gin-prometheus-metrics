@@ -145,10 +145,7 @@ func (p *PrometheusMiddleware) promethuesHandlerFunc() gin.HandlerFunc {
 				c.Next()
 				return
 			}
-		} else {
-			goto exec
 		}
-
 	exec:
 
 		begin := time.Now()
