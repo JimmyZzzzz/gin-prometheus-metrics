@@ -1,4 +1,4 @@
-module github.com/JimmyZzzzz/gin-prometheus-metrics
+module github.com/JimmyZzzzz/ginprometheusmetrics
 
 go 1.20
 
