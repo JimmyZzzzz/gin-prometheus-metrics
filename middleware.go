@@ -98,9 +98,9 @@ func (p *PrometheusMiddleware) StopPush() {
 func (p *PrometheusMiddleware) GetCollector(name string) (cc prometheus.Collector) {
 
 	c, ok := p.defineMetrics[name]
-	metricType, _ := p.defineMetricType[name]
 
 	if ok {
+		metricType, _ := p.defineMetricType[name]
 
 		switch metricType {
 
