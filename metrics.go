@@ -4,7 +4,7 @@ import "github.com/prometheus/client_golang/prometheus"
 
 var (
 
-	//example 0.1s~0.6s~1.1s~1.6s...5.1s
+	//example 0.1s~0.6s~1.1s~1.6s...4.6s~+Inf
 	Interval500Mill  = prometheus.LinearBuckets(0.1, 0.5, 10)
 	Interval1000Mill = prometheus.LinearBuckets(0.1, 1, 10)
 	Interval2000Mill = prometheus.LinearBuckets(0.1, 2, 10)

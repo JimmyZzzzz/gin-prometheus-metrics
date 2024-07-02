@@ -40,7 +40,7 @@ type PrometheusOpts struct {
 }
 
 // runtime struct
-type PrometheusMiddleware struct {
+type prometheusMiddleware struct {
 	opts             PrometheusOpts
 	stopSign         chan struct{}
 	defineMetrics    map[string]prometheus.Collector
@@ -49,7 +49,7 @@ type PrometheusMiddleware struct {
 }
 
 // param ns namespace
-func NewPrometheus(ns string, opts PrometheusOpts, metrics []DefineMetric) *PrometheusMiddleware {
+func NewPrometheus(ns string, opts PrometheusOpts, metrics []DefineMetric) *prometheusMiddleware {
 
 	if metrics == nil {
 		metrics = make([]DefineMetric, 0)
@@ -66,7 +66,7 @@ func NewPrometheus(ns string, opts PrometheusOpts, metrics []DefineMetric) *Prom
 	})
 
 	stopCh := make(chan struct{})
-	p := &PrometheusMiddleware{opts: opts, stopSign: stopCh}
+	p := &prometheusMiddleware{opts: opts, stopSign: stopCh}
 	p.defineMetrics = make(map[string]prometheus.Collector)
 	p.defineMetricType = make(map[string]string)
 
@@ -87,20 +87,20 @@ func NewPrometheus(ns string, opts PrometheusOpts, metrics []DefineMetric) *Prom
 }
 
 // gin engine register middleware
-func (p *PrometheusMiddleware) Use(e *gin.Engine) {
+func (p *prometheusMiddleware) Use(e *gin.Engine) {
 	e.Use(p.promethuesHandlerFunc())
 	go p.pushMetrics()
 
 }
 
 // graceful shutdown
-func (p *PrometheusMiddleware) StopPush() {
+func (p *prometheusMiddleware) StopPush() {
 
 	p.stopSign <- struct{}{}
 
 }
 
-func (p *PrometheusMiddleware) GetCollector(name string) (cc prometheus.Collector) {
+func (p *prometheusMiddleware) GetCollector(name string) (cc prometheus.Collector) {
 
 	c, ok := p.defineMetrics[name]
 
@@ -132,13 +132,13 @@ func (p *PrometheusMiddleware) GetCollector(name string) (cc prometheus.Collecto
 
 }
 
-func (p *PrometheusMiddleware) SetLogger(w io.Writer) {
+func (p *prometheusMiddleware) SetLogger(w io.Writer) {
 
 	p.logWriter = w
 
 }
 
-func (p *PrometheusMiddleware) promethuesHandlerFunc() gin.HandlerFunc {
+func (p *prometheusMiddleware) promethuesHandlerFunc() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 
@@ -164,7 +164,7 @@ func (p *PrometheusMiddleware) promethuesHandlerFunc() gin.HandlerFunc {
 	}
 }
 
-func (p *PrometheusMiddleware) pushMetrics() {
+func (p *prometheusMiddleware) pushMetrics() {
 
 	timer := time.NewTicker(time.Duration(p.opts.PushInterval) * time.Second)
 	log.SetOutput(p.logWriter)
