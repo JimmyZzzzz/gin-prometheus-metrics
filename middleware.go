@@ -110,16 +110,16 @@ func (p *PrometheusMiddleware) GetCollector(name string) (cc prometheus.Collecto
 		switch metricType {
 
 		case "counter":
-			cc = c.(prometheus.CounterVec)
+			cc = c.(*prometheus.CounterVec)
 
 		case "gauge":
-			cc = c.(prometheus.GaugeVec)
+			cc = c.(*prometheus.GaugeVec)
 
 		case "histogram":
-			cc = c.(prometheus.HistogramVec)
+			cc = c.(*prometheus.HistogramVec)
 
 		case "summary":
-			cc = c.(prometheus.SummaryVec)
+			cc = c.(*prometheus.SummaryVec)
 
 		default:
 			return
@@ -158,7 +158,7 @@ func (p *PrometheusMiddleware) promethuesHandlerFunc() gin.HandlerFunc {
 		latency := time.Since(begin)
 		status := c.Writer.Status()
 
-		uriMetric, _ := p.defineMetrics[keyUriStr].(prometheus.HistogramVec)
+		uriMetric, _ := p.defineMetrics[keyUriStr].(*prometheus.HistogramVec)
 		uriMetric.WithLabelValues(c.Request.URL.Path, c.Request.Method, strconv.Itoa(status)).Observe(float64(latency.Milliseconds()))
 
 	}
