@@ -101,7 +101,7 @@ func (p *prometheusMiddleware) StopPush() {
 }
 
 // return value on demand
-func (p *prometheusMiddleware) GetCollector(name string) (c1 prometheus.Counter, c2 prometheus.Gauge, c3 prometheus.Histogram, c4 prometheus.Summary) {
+func (p *prometheusMiddleware) GetCollector(name string) (c1 *prometheus.CounterVec, c2 *prometheus.GaugeVec, c3 *prometheus.HistogramVec, c4 *prometheus.SummaryVec) {
 
 	c, ok := p.defineMetrics[name]
 
@@ -111,16 +111,16 @@ func (p *prometheusMiddleware) GetCollector(name string) (c1 prometheus.Counter,
 		switch metricType {
 
 		case "counter":
-			c1 = c.(prometheus.Counter)
+			c1 = c.(*prometheus.CounterVec)
 
 		case "gauge":
-			c2 = c.(prometheus.Gauge)
+			c2 = c.(*prometheus.GaugeVec)
 
 		case "histogram":
-			c3 = c.(prometheus.Histogram)
+			c3 = c.(*prometheus.HistogramVec)
 
 		case "summary":
-			c4 = c.(prometheus.Summary)
+			c4 = c.(*prometheus.SummaryVec)
 
 		default:
 			return
