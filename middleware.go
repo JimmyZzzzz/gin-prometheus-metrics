@@ -147,9 +147,9 @@ func (p *PrometheusMiddleware) promethuesHandlerFunc() gin.HandlerFunc {
 				if strings.HasPrefix(c.Request.URL.Path, uri) {
 					goto exec
 				}
-				c.Next()
-				return
 			}
+			c.Next()
+			return
 		}
 	exec:
 
