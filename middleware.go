@@ -174,7 +174,6 @@ func (p *prometheusMiddleware) pushMetrics() {
 		select {
 
 		case <-timer.C:
-			timestamp := time.Now().Format(time.DateTime)
 			pusher := push.New(p.opts.PushGateWayUrl, p.opts.JobName)
 
 			for _, metric := range p.defineMetrics {
@@ -185,8 +184,6 @@ func (p *prometheusMiddleware) pushMetrics() {
 
 			if err != nil {
 				log.Printf("Could not push to Pushgateway: %v", err)
-			} else {
-				log.Printf("Metrics pushed successfully with timestamp: %s", timestamp)
 			}
 
 		case <-p.stopSign:
