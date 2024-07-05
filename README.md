@@ -13,7 +13,7 @@ r := gin.Default()
   PushGateWayUrl: "http://192.168.8.199:9091",
   JobName:        "accountManage",
   Instance:       "pod1", //pod-name or hostname
-  MonitorUri:     []string{}, //empty default all uri
+  MonitorUri:     []string{}, //empty slice monitor all uri.
  }
 
 namespace := "app"
