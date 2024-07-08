@@ -160,7 +160,7 @@ func (p *prometheusMiddleware) promethuesHandlerFunc() gin.HandlerFunc {
 		status := c.Writer.Status()
 
 		uriMetric, _ := p.defineMetrics[keyUriStr].(*prometheus.HistogramVec)
-		uriMetric.WithLabelValues(c.Request.URL.Path, c.Request.Method, strconv.Itoa(status)).Observe(float64(latency.Milliseconds() / 1000))
+		uriMetric.WithLabelValues(c.Request.URL.Path, c.Request.Method, strconv.Itoa(status)).Observe(latency.Seconds())
 
 	}
 }
