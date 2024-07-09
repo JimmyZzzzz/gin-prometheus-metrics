@@ -35,7 +35,8 @@ type PrometheusOpts struct {
 	PushInterval   uint8
 	PushGateWayUrl string
 	JobName        string
-	Instance       string //run instance: example pod-name hostname
+	Instance       string   //run instance: example pod-name hostname
+	ExcludeMethod  []string // example HEAD
 	MonitorUri     []string
 }
 
@@ -142,6 +143,19 @@ func (p *prometheusMiddleware) SetLogger(w io.Writer) {
 func (p *prometheusMiddleware) promethuesHandlerFunc() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
+
+		if len(p.opts.ExcludeMethod) != 0 {
+
+			for _, excludeMethod := range p.opts.ExcludeMethod {
+
+				if strings.EqualFold(strings.ToUpper(excludeMethod), strings.ToUpper(c.Request.Method)) {
+					c.Next()
+					return
+				}
+
+			}
+
+		}
 
 		if len(p.opts.MonitorUri) > 0 {
 			for _, uri := range p.opts.MonitorUri {
