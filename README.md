@@ -14,6 +14,7 @@ r := gin.Default()
   JobName:        "accountManage",
   Instance:       "pod1", //pod-name or hostname
   MonitorUri:     []string{}, //empty slice monitor all uri.
+  ExcludeMethod:  []string{"HEAD"}, //exclude http method
  }
 
 namespace := "app"
