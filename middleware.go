@@ -38,6 +38,7 @@ type PrometheusOpts struct {
 	Instance       string   //run instance: example pod-name hostname
 	ExcludeMethod  []string // example HEAD
 	MonitorUri     []string
+	UrlLabel       map[string]string
 }
 
 // runtime struct
@@ -168,13 +169,30 @@ func (p *prometheusMiddleware) promethuesHandlerFunc() gin.HandlerFunc {
 		}
 	exec:
 
+		url := c.Request.URL.Path
+
+		//replace
+		if len(p.opts.UrlLabel) > 0 {
+
+			for k, v := range p.opts.UrlLabel {
+				for _, p := range c.Params {
+					if p.Key == k {
+						url = strings.Replace(url, p.Value, v, 1)
+						break
+					}
+				}
+
+			}
+
+		}
+
 		begin := time.Now()
 		c.Next()
 		latency := time.Since(begin)
 		status := c.Writer.Status()
 
 		uriMetric, _ := p.defineMetrics[keyUriStr].(*prometheus.HistogramVec)
-		uriMetric.WithLabelValues(c.Request.URL.Path, c.Request.Method, strconv.Itoa(status)).Observe(latency.Seconds())
+		uriMetric.WithLabelValues(url, c.Request.Method, strconv.Itoa(status)).Observe(latency.Seconds())
 
 	}
 }
