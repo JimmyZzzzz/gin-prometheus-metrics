@@ -172,7 +172,7 @@ func (p *prometheusMiddleware) promethuesHandlerFunc() gin.HandlerFunc {
 		url := c.Request.URL.Path
 
 		//replace
-		if len(p.opts.UrlLabel) > 0 {
+		if p.opts.UrlLabel != nil && len(p.opts.UrlLabel) > 0 {
 
 			for k, v := range p.opts.UrlLabel {
 				for _, p := range c.Params {
